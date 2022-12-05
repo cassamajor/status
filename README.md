@@ -7,7 +7,7 @@ Go wrapper for [Plain Text Status](https://status.plaintext.sh)
 2. Run `go build -o status main.go`
 3. Move the `status` binary to `/usr/local/bin`
 
-There is also a pre-built binary, which will require going into `Security & Privacy` settings to let it run.
+Alternatively, the [binary is available on GitHub](https://github.com/cassamajor/status/releases), and will require going into `Security & Privacy` settings to let it run.
 
 ## Usage
 ```shell
