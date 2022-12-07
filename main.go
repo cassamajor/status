@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func getStatus(url string) *http.Response {
+func getStatus(url string) (*http.Response, error) {
 	resp, err := http.Get(url)
 
 	if err != nil {
@@ -17,11 +17,11 @@ func getStatus(url string) *http.Response {
 	}
 
 	if resp.StatusCode > 299 {
-		resp.Body.Close()
-		log.Fatalf("Response failed with status code: %d\n", resp.StatusCode)
+		return resp, fmt.Errorf("response failed with status code: %d\n", resp.StatusCode)
+
 	}
 
-	return resp
+	return resp, nil
 }
 
 func parseStatus(services []string, resp *http.Response) {
@@ -43,8 +43,7 @@ func parseStatus(services []string, resp *http.Response) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		resp.Body.Close()
-		log.Fatalf("Scanner encountered an error: %v", err)
+		log.Printf("scanner encountered an error: %v\n", err)
 	}
 }
 
@@ -52,8 +51,13 @@ func main() {
 	flag.Parse()
 	services := flag.Args()
 
-	resp := getStatus("https://status.plaintext.sh/t")
+	resp, err := getStatus("https://status.plaintext.sh/t")
 	defer resp.Body.Close()
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
 	parseStatus(services, resp)
 }
