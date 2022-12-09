@@ -17,8 +17,7 @@ func getStatus(url string) (*http.Response, error) {
 	}
 
 	if resp.StatusCode > 299 {
-		return resp, fmt.Errorf("response failed with status code: %d\n", resp.StatusCode)
-
+		return resp, fmt.Errorf("Response failed with status code: %d and\nbody: %s\n", resp.StatusCode, resp.Body)
 	}
 
 	return resp, nil
